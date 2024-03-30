@@ -11,14 +11,14 @@ import SnapKit
 
 let TOP_INSET = 50.0//search bar距离顶部间距
 let SEARCH_BAR_HEIGHT = 50.0//search bar高度
-let BOTTOM_FOOTER_HEIGHT = 60.0//滑动view滑动到最下面，以最小方式显示时的高度
+let BOTTOM_FOOTER_HEIGHT = 70.0//滑动view滑动到最下面，以最小方式显示时的高度
 let SCROLL_VIEW_HEIGHT = SCREEN_HEIGHT - TOP_INSET - SEARCH_BAR_HEIGHT - BOTTOM_INSET_HEIGHT//滑动view的最大高度
-let TOP_CRITICA_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT/3//轻扫手势慢速停止时，滑动view动画回到顶部的临界位置
-let BOTTOM_CRITICAL_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*5/6//轻扫手势慢速停止时，滑动view动画回到底部的临界位置
+let TOP_CRITICA_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*5/18//轻扫手势慢速停止时，滑动view动画回到顶部的临界位置
+let BOTTOM_CRITICAL_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*7/9//轻扫手势慢速停止时，滑动view动画回到底部的临界位置
 
 class GDMapViewController: UIViewController {
     
-    private var curScrollTopInset = SCROLL_VIEW_HEIGHT*2/3
+    private var curScrollTopInset = SCROLL_VIEW_HEIGHT*5/9
     
     private lazy var locationManager: CLLocationManager = {
         let locationManager = CLLocationManager()
@@ -80,7 +80,7 @@ class GDMapViewController: UIViewController {
         
         searchBar.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(TOP_INSET)
-            make.leading.trailing.equalToSuperview().inset(15)
+            make.leading.trailing.equalToSuperview().inset(10)
             make.height.equalTo(SEARCH_BAR_HEIGHT)
         }
         
@@ -134,7 +134,7 @@ extension GDMapViewController {
     }
     
     func panEndHeightVelocity(_ velocity: CGPoint) {
-        if CGRectGetMinY(scrollView.frame) < TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*2/3 {
+        if CGRectGetMinY(scrollView.frame) < TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*5/9 {
             if velocity.y > 0 {
                 animateToMid()
             } else {
@@ -163,11 +163,11 @@ extension GDMapViewController {
     func animateToMid() {
         UIView.animate(withDuration: 0.15) {
             self.scrollView.snp.updateConstraints { make in
-                make.top.equalTo(self.searchBar.snp.bottom).offset(SCROLL_VIEW_HEIGHT*2/3)
+                make.top.equalTo(self.searchBar.snp.bottom).offset(SCROLL_VIEW_HEIGHT*5/9)
             }
             self.view.layoutIfNeeded()
         } completion: { com in
-            self.curScrollTopInset = SCROLL_VIEW_HEIGHT*2/3
+            self.curScrollTopInset = SCROLL_VIEW_HEIGHT*5/9
         }
     }
     
