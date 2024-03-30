@@ -1,0 +1,6 @@
+framework module Pods_GaoDeMapDemoTests {
+  umbrella header "Pods-GaoDeMapDemoTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
