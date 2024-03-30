@@ -13,12 +13,13 @@ let TOP_INSET = 50.0//search bar距离顶部间距
 let SEARCH_BAR_HEIGHT = 50.0//search bar高度
 let BOTTOM_FOOTER_HEIGHT = 70.0//滑动view滑动到最下面，以最小方式显示时的高度
 let SCROLL_VIEW_HEIGHT = SCREEN_HEIGHT - TOP_INSET - SEARCH_BAR_HEIGHT - BOTTOM_INSET_HEIGHT//滑动view的最大高度
-let TOP_CRITICA_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*5/18//轻扫手势慢速停止时，滑动view动画回到顶部的临界位置
-let BOTTOM_CRITICAL_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*7/9//轻扫手势慢速停止时，滑动view动画回到底部的临界位置
+let TOP_CRITICA_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*(TOP_PROPORTION/2)//轻扫手势慢速停止时，滑动view动画回到顶部的临界位置
+let BOTTOM_CRITICAL_HEIGHT = TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT/2*(1+TOP_PROPORTION)//轻扫手势慢速停止时，滑动view动画回到底部的临界位置
+let TOP_PROPORTION: Double = 5/9
 
 class GDMapViewController: UIViewController {
     
-    private var curScrollTopInset = SCROLL_VIEW_HEIGHT*5/9
+    private var curScrollTopInset = SCROLL_VIEW_HEIGHT*TOP_PROPORTION
     
     private lazy var locationManager: CLLocationManager = {
         let locationManager = CLLocationManager()
@@ -134,7 +135,7 @@ extension GDMapViewController {
     }
     
     func panEndHeightVelocity(_ velocity: CGPoint) {
-        if CGRectGetMinY(scrollView.frame) < TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*5/9 {
+        if CGRectGetMinY(scrollView.frame) < TOP_INSET + SEARCH_BAR_HEIGHT + SCROLL_VIEW_HEIGHT*TOP_PROPORTION {
             if velocity.y > 0 {
                 animateToMid()
             } else {
@@ -163,11 +164,11 @@ extension GDMapViewController {
     func animateToMid() {
         UIView.animate(withDuration: 0.15) {
             self.scrollView.snp.updateConstraints { make in
-                make.top.equalTo(self.searchBar.snp.bottom).offset(SCROLL_VIEW_HEIGHT*5/9)
+                make.top.equalTo(self.searchBar.snp.bottom).offset(SCROLL_VIEW_HEIGHT*TOP_PROPORTION)
             }
             self.view.layoutIfNeeded()
         } completion: { com in
-            self.curScrollTopInset = SCROLL_VIEW_HEIGHT*5/9
+            self.curScrollTopInset = SCROLL_VIEW_HEIGHT*TOP_PROPORTION
         }
     }
     
